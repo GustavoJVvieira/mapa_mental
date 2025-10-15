@@ -108,7 +108,9 @@ button.secondary {
   text-align: right;
   padding: 4px;
   box-sizing: border-box;
-  z-index: 100; /* Deve estar acima dos nós */
+  /* MUDANÇA: Abaixar o z-index para que os nós do mapa apareçam por cima */
+  z-index: 1; 
+  /* FIM MUDANÇA */
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
@@ -125,7 +127,7 @@ button.secondary {
   border: 2px solid var(--border-color);
   cursor: grab;
   text-align: center;
-  z-index: 20;
+  z-index: 20; /* Garantir que os nós fiquem por cima */
   touch-action: none;
 }
 .node .title {
