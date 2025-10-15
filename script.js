@@ -214,15 +214,15 @@ function createColorPalette() {
         colorPaletteContainer.appendChild(square);
     });
 }
-// OBSERVAÇÃO: A declaração duplicada de downloadMindMap foi removida daqui.
-
 // --- Função de Download (VERSÃO CORRETA E ÚNICA) ---
 function downloadMindMap() {
+    // MUDANÇA: Obtenção e manipulação do guia de impressão adicionada
     const printGuide = document.getElementById('print-guide');
     // Oculta o guia de impressão temporariamente para não aparecer no PNG
     if (printGuide) {
         printGuide.style.display = 'none';
     }
+    // FIM MUDANÇA
 
     html2canvas(stage, {
         scale: 2, // Increase resolution for better quality
@@ -233,20 +233,21 @@ function downloadMindMap() {
         link.download = 'mind_map.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
-        
-        // Reexibe o guia após a captura
+
+        // MUDANÇA: Reexibe o guia após a captura bem-sucedida
         if (printGuide) {
-            printGuide.style.display = 'flex'; // Usar 'flex' pois é o display setado no CSS
+            printGuide.style.display = 'flex'; 
         }
-    }).catch(error => {
+    // MUDANÇA: Adiciona catch para reexibir o guia em caso de erro
+    }).catch(error => { 
         console.error("Erro ao gerar PNG:", error);
         // Garante que o guia seja reexibido mesmo em caso de erro
         if (printGuide) {
             printGuide.style.display = 'flex';
         }
     });
+    // FIM MUDANÇA
 }
-
 
 // --- Parser ---
 function parseInput(text){
@@ -598,189 +599,4 @@ function updateSVGLines() {
             const t_p2y_N2 = t_endY_N2;
             
             // Path: M (Box Lateral) L (MidX, Box Y) L (MidX, Sub Y) L (Sub Lateral)
-            const pathD_N2 = `M ${t_startX_N1} ${t_startY_N1} L ${t_p1x_N2} ${t_p1y_N2} L ${t_p2x_N2} ${t_p2y_N2} L ${t_endX_N2} ${t_endY_N2}`;
-
-            lineN2.setAttribute('d', pathD_N2);
-            svg.appendChild(lineN2);
-
-
-            // 2.3. Cálculo da Linha SUBTÓPICO -> SUB-SUBTÓPICO (L-Shape)
-            // * Aplica a cor do Box Principal (Avô) como solicitado
-            let currentSubSubY = newSubMetrics.y + newSubMetrics.h + 5;
-            subData.subsubtópicos.forEach((subSubData, k) => {
-                const subSubEl = subSubData.el;
-                
-                // Posicionamento Automático dos Sub-Subtópicos (se não arrastados)
-                if (!subSubEl._isDragging && !subSubEl._hasBeenDragged) {
-                    const subSubXPos = newSubMetrics.x + HORIZONTAL_INDENT;
-                    const subSubYPos = currentSubSubY;
-                    subSubEl.style.left = subSubXPos + 'px';
-                    subSubEl.style.top = subSubYPos + 'px';
-                }
-                
-                // Recalcula métricas após potencial reposicionamento
-                const finalSubSubMetrics = getElementMetrics(subSubEl);
-
-                const subSubLine = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                subSubLine.classList.add('sub-sub-line');
-                // MUDANÇA: Define a cor da linha com base na cor do Box Principal (Avô)
-                subSubLine.setAttribute('stroke', boxColor);
-                // FIM MUDANÇA
-                
-                // PONTO DE PARTIDA (Subtópico Lateral Esquerda)
-                const t_startX_N2 = transformX(newSubMetrics.x); 
-                const t_startY_N2 = transformY(newSubMetrics.cy); 
-                
-                // PONTO FINAL (Sub-Subtópico Lateral Esquerda)
-                const t_endX_N3 = transformX(finalSubSubMetrics.x);
-                const t_endY_N3 = transformY(finalSubSubMetrics.cy);
-                
-                // PONTO INTERMEDIÁRIO (Horizontal) - Recuo para o alinhamento
-                const subSubMidX = finalSubSubMetrics.x - LINE_TO_TEXT_OFFSET;
-                const t_p1x_N3 = transformX(subSubMidX);
-                const t_p1y_N3 = t_startY_N2; // Alinhado verticalmente com o Subtópico
-
-                // PONTO INTERMEDIÁRIO (Vertical)
-                const t_p2x_N3 = t_p1x_N3;
-                const t_p2y_N3 = t_endY_N3;
-
-                // Path: M (Sub Lateral) L (SubSub MidX, Sub Y) L (SubSub MidX, SubSub Y) L (SubSub Lateral)
-                const pathD_N3 = `M ${t_startX_N2} ${t_startY_N2} L ${t_p1x_N3} ${t_p1y_N3} L ${t_p2x_N3} ${t_p2y_N3} L ${t_endX_N3} ${t_endY_N3}`;
-                
-                subSubLine.setAttribute('d', pathD_N3);
-                svg.appendChild(subSubLine);
-                
-                currentSubSubY += finalSubSubMetrics.h + 5;
-            });
-           
-            currentSubY = Math.max(currentSubY, currentSubSubY) + SUB_SPACING_Y;
-        });
-    });
-}
-// --- Funções de Pan/Zoom ---
-function applyTransform(){
-  stage.style.transform = `translate(${panX}px, ${panY}px) scale(${zoom})`;
-  svg.style.transform = `translate(0, 0)`;
-  updateSVGLines();
-}
-
-// Nova função para a geração via API
-async function generateMapFromGemini() {
-    const rawText = document.getElementById('input').value;
-    const generateBtn = document.getElementById('generateBtn');
-    
-    if (!rawText.trim()) {
-        alert('Por favor, insira o texto a ser analisado no campo de entrada.');
-        return;
-    }
-
-    // Feedback visual
-    const originalText = generateBtn.innerText;
-    generateBtn.innerText = 'Gerando...';
-    generateBtn.disabled = true;
-    
-    const BACKEND_URL = 'http://localhost:3000/generate-map'; // URL do seu backend
-
-    try {
-        const response = await fetch(BACKEND_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ text: rawText }),
-        });
-
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || `Erro HTTP: ${response.status}`);
-        }
-
-        const data = await response.json();
-        const generatedMapText = data.generatedMapText;
-
-        // Coloca o texto gerado de volta no textarea e desenha
-        document.getElementById('input').value = generatedMapText;
-        
-        const docs = parseInput(generatedMapText);
-        if(docs.length > 0) {
-            draw(docs[0]);
-        } else {
-            alert('A API gerou um texto inválido. Verifique o console.');
-        }
-
-    } catch (error) {
-        console.error("Erro na geração:", error);
-        alert(`Erro ao gerar mapa: ${error.message}`);
-    } finally {
-        generateBtn.innerText = originalText;
-        generateBtn.disabled = false;
-    }
-}
-
-// --- Event Listeners e Inicialização ---
-window.addEventListener('load', ()=>{
-  // Inicialização dos elementos DOM
-  stage = document.getElementById('stage');
-  svg = document.getElementById('svg');
-  createColorPalette(); // Inicializa a paleta de cores
-  const txt = document.getElementById('input').value;
-  const docs = parseInput(txt);
-  if(docs.length > 0) draw(docs[0]);
-  resize();
-  document.getElementById('zoomLevel').innerText='100%';
-  // Pan/Zoom setup
-  const viewport = document.querySelector('.viewport');
- 
-  // Evento de Zoom
-  viewport.addEventListener('wheel', (e)=>{
-    e.preventDefault();
-    const oldZoom = zoom;
-    const delta = -e.deltaY*0.001;
-    zoom = Math.min(2.5, Math.max(0.4, zoom*(1+delta)));
-    const rect = viewport.getBoundingClientRect();
-    const mx = e.clientX - rect.left;
-    const my = e.clientY - rect.top;
-    const scaleChange = zoom/oldZoom;
-    panX = mx - scaleChange*(mx - panX);
-    panY = my - scaleChange*(my - panY);
-    applyTransform();
-    document.getElementById('zoomLevel').innerText = Math.round(zoom*100)+'%';
-  }, {passive:false});
- 
-  viewport.addEventListener('contextmenu', (e)=>e.preventDefault());
- 
-  // Eventos de Pan (Arrastar com Botão Direito)
-  viewport.addEventListener('pointerdown', (e)=>{
-    if(e.button!==2) return; isPanning=true; panStartX=e.clientX; panStartY=e.clientY; startPanX=panX; startPanY=panY;
-  });
-  window.addEventListener('pointermove', (ev)=>{
-    if(!isPanning) return;
-    panX = startPanX + (ev.clientX - panStartX);
-    panY = startPanY + (ev.clientY - panStartY);
-    applyTransform();
-  });
-  window.addEventListener('pointerup', (e)=>{ isPanning=false; });
-  function resize(){
-    svg.setAttribute('width', stage.clientWidth);
-    svg.setAttribute('height', stage.clientHeight);
-    svg.style.width='100%';
-    svg.style.height='100%';
-    updateSVGLines();
-  }
-  new ResizeObserver(resize).observe(stage);
- 
-  // Botões de controle
-  document.getElementById('parseBtn').addEventListener('click', ()=>{
-    const txt = document.getElementById('input').value;
-    const docs = parseInput(txt);
-    if(docs.length===0){ alert('Não encontrei nada para desenhar'); return; }
-    draw(docs[0]);
-  });
-  document.getElementById('clearBtn').addEventListener('click', clearStage);
-  
-  // Event Listener para o botão de Geração
-  document.getElementById('generateBtn').addEventListener('click', generateMapFromGemini); 
-  
-  document.getElementById('downloadBtn').addEventListener('click', downloadMindMap);
-});
-// Fim do script.js
+            const pathD_N2 = `M ${t_startX_N1} ${t_startY_N1} L
