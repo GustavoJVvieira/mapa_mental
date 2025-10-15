@@ -100,7 +100,6 @@ button.secondary {
   height: 720px;
   margin-left: -640px; /* -width/2 */
   margin-top: -360px; /* -height/2 */
-  /* CORREÇÃO: Cor mais suave e opacidade */
   border: 2px dashed var(--muted); 
   pointer-events: none; 
   opacity: 0.8;
@@ -109,7 +108,7 @@ button.secondary {
   text-align: right;
   padding: 4px;
   box-sizing: border-box;
-  /* MANTIDO: Z-index muito baixo */
+  /* MANTIDO: Z-index baixo, deve ficar no fundo */
   z-index: 1; 
   display: flex;
   justify-content: flex-end;
@@ -126,7 +125,7 @@ button.secondary {
   border: 2px solid var(--border-color);
   cursor: grab;
   text-align: center;
-  /* AUMENTADO: Z-index máximo para garantir a sobreposição de todos os nós */
+  /* MANTIDO: Z-index máximo para garantir a sobreposição de todos os nós */
   z-index: 100; 
   touch-action: none;
 }
