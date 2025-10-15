@@ -108,7 +108,7 @@ button.secondary {
   text-align: right;
   padding: 4px;
   box-sizing: border-box;
-  /* MANTIDO: Z-index baixo, deve ficar no fundo */
+  /* Z-index baixo, deve ficar no fundo */
   z-index: 1; 
   display: flex;
   justify-content: flex-end;
@@ -125,7 +125,7 @@ button.secondary {
   border: 2px solid var(--border-color);
   cursor: grab;
   text-align: center;
-  /* MANTIDO: Z-index máximo para garantir a sobreposição de todos os nós */
+  /* Z-index alto para garantir que os nós fiquem visíveis */
   z-index: 100; 
   touch-action: none;
 }
@@ -134,7 +134,26 @@ button.secondary {
   font-size: 15px;
   color: var(--box-text);
   margin: 0;
+  /* CORREÇÃO: Força o fundo a ser transparente, mas o nó principal já tem um background */
+  /* Para resolver o vazamento da linha, vamos garantir que o texto não use a cor de fundo do body/stage */
+  /* Removemos o `background-clip: text` ou `color: transparent` que poderia ter sido inserido */
 }
+
+/* NÓS CENTRAIS E FILHOS */
+.central .title {
+    /* MUDANÇA: Define o fundo do título para a mesma cor do nó central. */
+    /* Isso garante que a área atrás do texto seja sólida e não deixe as linhas passarem. */
+    background-color: var(--central-node-bg);
+    /* Adicionamos box-shadow: none para evitar qualquer artefato de sombreamento */
+    box-shadow: none; 
+}
+.child.box-color-1 .title { background-color: var(--box1-bg); }
+.child.box-color-2 .title { background-color: var(--box2-bg); }
+.child.box-color-3 .title { background-color: var(--box3-bg); }
+.child.box-color-4 .title { background-color: var(--box4-bg); }
+.child.box-color-5 .title { background-color: var(--box5-bg); }
+
+
 /* NÍVEL 2: SUBTÓPICO */
 .sub-node {
   position: absolute;
@@ -192,7 +211,6 @@ svg {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* MANTIDO: SVG de linhas fica abaixo dos nós (100) mas acima do guia (1) */
   z-index: 50; 
 }
 svg path {
