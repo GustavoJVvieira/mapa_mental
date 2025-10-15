@@ -216,7 +216,7 @@ function createColorPalette() {
 }
 // --- Função de Download (LIMPA) ---
 function downloadMindMap() {
-    // TODA A LÓGICA DE MANIPULAÇÃO DO printGuide FOI REMOVIDA
+    // A captura de tela é feita no elemento #stage, que agora tem o tamanho do seu container visível
     html2canvas(stage, {
         scale: 2, // Aumenta a resolução para melhor qualidade
         useCORS: true,
