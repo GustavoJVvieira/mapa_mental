@@ -1,0 +1,259 @@
+:root{
+  /* Cores base para o design */
+  --bg: #f8f8f8; --panel: #ffffff; --text: #333333; --muted: #aaaaaa;
+  --box-text: #ffffff; --subtopic-text: #333333;
+  --central-node-bg: #4c4c4c; --box1-bg: #5cb85c; --box2-bg: #9c58b6;
+  --box3-bg: #4c87c6; --box4-bg: #e6c243; --box5-bg: #f0f0f0; --box5-text: #333333;
+  --accent: #7c3aed;
+  --border-color: #2a2a2a; /* Cor padrão da borda */
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Inter, system-ui, Segoe UI, Roboto, Arial;
+  color: var(--text);
+  /* A imagem de fundo SVG in-line foi mantida aqui, pois a URL de dados deve estar no CSS */
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 500 500' width='100%' height='100%'%3E%3Cpath d='M50 200 Q100 100 150 200 Q200 300 250 200 Q300 100 350 200 Q400 300 450 200' fill='none' stroke='%23d3d3d3' stroke-width='50' opacity='0.3'/%3E%3Cpath d='M70 220 Q120 120 170 220 Q220 320 270 220 Q320 120 370 220 Q420 320 430 220' fill='none' stroke='%23d3d3d3' stroke-width='40' opacity='0.2'/%3E%3C/svg%3E") no-repeat center center fixed, linear-gradient(180deg, var(--bg), #f0f0f0);
+  background-size: cover;
+}
+.app {
+  display: grid;
+  grid-template-columns: 360px 1fr;
+  gap: 16px;
+  height: 100vh;
+  padding: 16px;
+  box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+}
+.panel {
+  background: var(--panel);
+  padding: 16px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+h2 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+textarea {
+  width: 100%;
+  height: 48vh;
+  resize: none;
+  background: var(--bg);
+  border: 1px dashed #cccccc;
+  padding: 12px;
+  color: var(--text);
+  border-radius: 8px;
+}
+.controls {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+button {
+  background: var(--central-node-bg);
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+button.secondary {
+  background: transparent;
+  border: 1px solid #cccccc;
+  color: var(--text);
+}
+.help {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 12px;
+}
+.canvas-wrap {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--bg);
+}
+.toolbar {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+}
+.viewport {
+  position: absolute;
+  inset: 0;
+}
+#stage {
+  width: 100%;
+  height: 100%;
+  transform-origin: 0 0;
+}
+.node {
+  position: absolute;
+  min-width: 160px;
+  max-width: 200px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  border: 2px solid var(--border-color);
+  cursor: grab;
+  text-align: center;
+  z-index: 20;
+  touch-action: none;
+}
+.node .title {
+  font-weight: 900;
+  font-size: 15px;
+  color: var(--box-text);
+  margin: 0;
+}
+/* NÍVEL 2: SUBTÓPICO */
+.sub-node {
+  position: absolute;
+  font-size: 14px;
+  color: var(--subtopic-text);
+  cursor: grab;
+  z-index: 10;
+  max-width: 200px;
+  padding: 2px 0;
+  text-align: left;
+  font-weight: normal;
+  touch-action: none;
+}
+/* NÍVEL 3: SUBSUBTÓPICO */
+.sub-sub-node {
+  position: absolute;
+  font-size: 14px;
+  color: var(--subtopic-text);
+  cursor: grab;
+  z-index: 5;
+  max-width: 180px;
+  padding: 1px 0;
+  text-align: left;
+  touch-action: none;
+}
+.central {
+  background: var(--central-node-bg);
+  color: var(--box-text);
+}
+.child.box-color-1 {
+  background: var(--box1-bg);
+  border-color: var(--box1-bg);
+}
+.child.box-color-2 {
+  background: var(--box2-bg);
+  border-color: var(--box2-bg);
+}
+.child.box-color-3 {
+  background: var(--box3-bg);
+  border-color: var(--box3-bg);
+}
+.child.box-color-4 {
+  background: var(--box4-bg);
+  border-color: var(--box4-bg);
+}
+.child.box-color-5 {
+  background: var(--box5-bg);
+  border-color: var(--box5-bg);
+}
+.child.box-color-5 .title, .child.box-color-5 {
+  color: var(--box5-text);
+}
+svg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+svg path {
+  stroke: var(--muted);
+  fill: none;
+  stroke-width: 1.5;
+  stroke-dasharray: 4 4;
+}
+svg .sub-line {
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+svg .sub-sub-line {
+  stroke: #999;
+  stroke-width: 1;
+  stroke-dasharray: 2 2;
+}
+/* Estilos do Modal de Edição */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+.modal-content {
+  background: var(--panel);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  width: 300px;
+}
+.modal-content h3 {
+  margin-top: 0;
+  color: var(--accent);
+}
+.modal-content label {
+  display: block;
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.modal-content input {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  box-sizing: border-box;
+  color: var(--text);
+  background: var(--bg);
+}
+.modal-buttons {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+.modal-buttons button {
+  background: var(--accent);
+}
+.modal-buttons .cancel-btn {
+  background: #ccc;
+  color: var(--text);
+}
+
+/* NOVOS ESTILOS PARA A PALETA DE CORES */
+.color-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+.color-square {
+    width: 24px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: transform 0.1s, box-shadow 0.1s;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+.color-square:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+}
+.color-square.selected {
+    border: 3px solid var(--accent);
+    transform: scale(1.15);
+}

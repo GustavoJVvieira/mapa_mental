@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerador de Mapa Mental Dinâmico (Hierarquia Consistente)</title>
+
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> </head>
+<body>
+  <div class="app">
+    <div class="panel">
+      <h2>Entrada (cole o texto do mapa ou insira o texto a ser analisado)</h2>
+      <textarea id="input">
+[ideia central:] Gestão de reservas e Atendimento
+[box 1.] Reservas e Atendimento
+subtópico 1 - Coletar | Dados Iniciais
+subtópico 1.1 - Teste Nível 3 | (Quebra Manual Aqui)
+subtópico 1.2 - Análise de Fluxo
+subtópico 2 - Armazenar
+subtópico 3 - Organizar
+subtópico 4 - Controlar dados e informações | com Multiplas Linhas
+[box 2.] Sistemas de reservas
+subtópico 1 - ERP
+subtópico 2 - CMS
+[box 3.] Softwares de distribuição de serviços
+subtópico 1 - AMADEUS
+subtópico 2 - SABRE | Novo Treinamento
+subtópico 2.1 - Treinamento SABRE | Módulo 1 | Módulo 2
+subtópico 2.2 - Suporte 24h
+subtópico 3 - TRAVELSPAN
+[box 4.] Gestão de reservas
+subtópico 1 - KPIs de Ocupação
+subtópico 2 - Estratégias de Pricing
+[box 5.] Serviço de Atendimento ao Cliente (SAC)
+subtópico 1 - Cliente | Demanda de atendimento
+      </textarea>
+      <div class="controls">
+        <button id="parseBtn">Parser & Desenhar</button>
+        <button class="secondary" id="clearBtn">Limpar</button>
+        <button id="generateBtn" style="background: var(--azul-escuro, #1e5f9b);">Gerar com Gemini</button> 
+        <button id="downloadBtn">Download PNG</button>
+      </div>
+      <div class="help">Dê **duplo clique** no título para abrir o editor. Arraste os nós. Zoom e Pan corrigidos. Use o caractere **`|`** (pipe) na entrada para forçar uma quebra de linha.</div>
+    </div>
+    <div class="canvas-wrap panel">
+      <div class="toolbar">
+        <div style="flex:1;color:var(--muted)">Mapa mental dinâmico — arraste para mover nós • scroll=zoom • botão direito arrasta canvas</div>
+        <div id="zoomLevel" style="min-width:60px;text-align:right;color:var(--muted)">100%</div>
+      </div>
+      <div class="viewport">
+        <svg id="svg"></svg>
+        <div id="stage"></div>
+      </div>
+    </div>
+  </div>
+  <div id="editModal" class="modal-overlay">
+      <div class="modal-content">
+          <h3>Editar Nó</h3>
+          <label for="editTitle">Título:</label>
+          <input type="text" id="editTitle">
+         
+          <div id="colorEditFields"> <label for="editColor">Cor (Paleta ou #Hex):</label>
+              <div id="colorPalette" class="color-palette"></div>
+              <input type="text" id="editColor" placeholder="Ex: verde ou #FF5733" style="margin-top: 10px;">
+          </div>
+         
+          <div class="modal-buttons">
+              <button class="secondary cancel-btn" onclick="closeModal()">Cancelar</button>
+              <button onclick="saveNodeChanges()">Salvar</button>
+          </div>
+      </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
