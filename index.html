@@ -3,10 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gerador de Mapa Mental Dinâmico (Hierarquia Consistente)</title>
+  <title>Gerador de Mapa Mental Dinâmico (Frontend Puro)</title>
 
   <link rel="stylesheet" href="style.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> </head>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <!-- SDK oficial do Gemini via CDN -->
+  <script type="module" src="https://esm.run/@google/generative-ai"></script>
+</head>
+
 <body>
   <div class="app">
     <div class="panel">
@@ -35,17 +39,24 @@ subtópico 2 - Estratégias de Pricing
 [box 5.] Serviço de Atendimento ao Cliente (SAC)
 subtópico 1 - Cliente | Demanda de atendimento
       </textarea>
+
       <div class="controls">
         <button id="parseBtn">Parser & Desenhar</button>
         <button class="secondary" id="clearBtn">Limpar</button>
-        <button id="generateBtn" style="background: var(--azul-escuro, #1e5f9b);">Gerar com Gemini</button> 
+        <button id="generateBtn" style="background: var(--azul-escuro, #1e5f9b);">Gerar com Gemini</button>
         <button id="downloadBtn">Download PNG</button>
       </div>
-      <div class="help">Dê **duplo clique** no título para abrir o editor. Arraste os nós. Zoom e Pan corrigidos. Use o caractere **`|`** (pipe) na entrada para forçar uma quebra de linha.</div>
+      <div class="help">
+        Dê <b>duplo clique</b> no título para abrir o editor. Arraste os nós.
+        Zoom e Pan corrigidos. Use o caractere <b>`|`</b> (pipe) na entrada para forçar uma quebra de linha.
+      </div>
     </div>
+
     <div class="canvas-wrap panel">
       <div class="toolbar">
-        <div style="flex:1;color:var(--muted)">Mapa mental dinâmico — arraste para mover nós • scroll=zoom • botão direito arrasta canvas</div>
+        <div style="flex:1;color:var(--muted)">
+          Mapa mental dinâmico — arraste para mover nós • scroll=zoom • botão direito arrasta canvas
+        </div>
         <div id="zoomLevel" style="min-width:60px;text-align:right;color:var(--muted)">100%</div>
       </div>
       <div class="viewport">
@@ -54,24 +65,24 @@ subtópico 1 - Cliente | Demanda de atendimento
       </div>
     </div>
   </div>
+
   <div id="editModal" class="modal-overlay">
-      <div class="modal-content">
-          <h3>Editar Nó</h3>
-          <label for="editTitle">Título:</label>
-          <input type="text" id="editTitle">
-         
-          <div id="colorEditFields"> <label for="editColor">Cor (Paleta ou #Hex):</label>
-              <div id="colorPalette" class="color-palette"></div>
-              <input type="text" id="editColor" placeholder="Ex: verde ou #FF5733" style="margin-top: 10px;">
-          </div>
-         
-          <div class="modal-buttons">
-              <button class="secondary cancel-btn" onclick="closeModal()">Cancelar</button>
-              <button onclick="saveNodeChanges()">Salvar</button>
-          </div>
+    <div class="modal-content">
+      <h3>Editar Nó</h3>
+      <label for="editTitle">Título:</label>
+      <input type="text" id="editTitle">
+      <div id="colorEditFields">
+        <label for="editColor">Cor (Paleta ou #Hex):</label>
+        <div id="colorPalette" class="color-palette"></div>
+        <input type="text" id="editColor" placeholder="Ex: verde ou #FF5733" style="margin-top: 10px;">
       </div>
+      <div class="modal-buttons">
+        <button class="secondary cancel-btn" onclick="closeModal()">Cancelar</button>
+        <button onclick="saveNodeChanges()">Salvar</button>
+      </div>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="script.js"></script>
 </body>
 </html>
