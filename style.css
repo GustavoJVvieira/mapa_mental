@@ -89,6 +89,32 @@ button.secondary {
   height: 100%;
   transform-origin: 0 0;
 }
+
+/* NOVO ESTILO: Guia de Área de Download */
+#print-guide {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* Tamanho de referência: 1280x720 pixels (HD 16:9) */
+  width: 1280px;
+  height: 720px;
+  margin-left: -640px; /* -width/2 */
+  margin-top: -360px; /* -height/2 */
+  border: 2px dashed #ff5722; /* Linha tracejada laranja */
+  pointer-events: none; /* Não deve interferir no clique */
+  opacity: 0.5;
+  color: #ff5722;
+  font-size: 12px;
+  text-align: right;
+  padding: 4px;
+  box-sizing: border-box;
+  z-index: 100; /* Deve estar acima dos nós */
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+}
+/* FIM NOVO ESTILO */
+
 .node {
   position: absolute;
   min-width: 160px;
@@ -123,7 +149,7 @@ button.secondary {
   touch-action: none;
 }
 /* NÍVEL 3: SUBSUBTÓPICO */
-/* MUDANÇA: Alterado para font-weight: bold para também ficar em negrito */
+/* Alterado para font-weight: bold para também ficar em negrito */
 .sub-sub-node {
   position: absolute;
   font-size: 14px;
