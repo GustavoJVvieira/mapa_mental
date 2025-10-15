@@ -214,38 +214,22 @@ function createColorPalette() {
         colorPaletteContainer.appendChild(square);
     });
 }
-
-// --- Função de Download (VERSÃO CORRETA E ÚNICA COM OPACITY) ---
+// --- Função de Download (LIMPA) ---
 function downloadMindMap() {
-    const printGuide = document.getElementById('print-guide');
-    // CORREÇÃO: Usa opacidade para ocultar o guia durante a captura, preservando o layout.
-    if (printGuide) {
-        printGuide.style.opacity = '0';
-    }
-
+    // TODA A LÓGICA DE MANIPULAÇÃO DO printGuide FOI REMOVIDA
     html2canvas(stage, {
-        scale: 2, 
+        scale: 2, // Aumenta a resolução para melhor qualidade
         useCORS: true,
-        backgroundColor: null 
+        backgroundColor: null // Preserva a transparência se necessário
     }).then(canvas => {
         const link = document.createElement('a');
         link.download = 'mind_map.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
-        
-        // CORREÇÃO: Restaura a opacidade original do guia
-        if (printGuide) {
-            printGuide.style.opacity = '0.8'; 
-        }
     }).catch(error => { 
         console.error("Erro ao gerar PNG:", error);
-        // CORREÇÃO: Restaura a opacidade em caso de erro
-        if (printGuide) {
-            printGuide.style.opacity = '0.8';
-        }
     });
 }
-
 
 // --- Parser ---
 function parseInput(text){
