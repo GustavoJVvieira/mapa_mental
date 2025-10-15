@@ -83,6 +83,9 @@ button.secondary {
 .viewport {
   position: absolute;
   inset: 0;
+  /* MUDANÇA: Adiciona a borda tracejada aqui para servir como guia */
+  border: 2px dashed var(--muted); 
+  box-sizing: border-box; /* Garante que a borda não adicione tamanho */
 }
 #stage {
   width: 100%;
@@ -90,30 +93,7 @@ button.secondary {
   transform-origin: 0 0;
 }
 
-/* ESTILO: Guia de Área de Download */
-#print-guide {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  /* Tamanho de referência: 1280x720 pixels (HD 16:9) */
-  width: 1280px;
-  height: 720px;
-  margin-left: -640px; /* -width/2 */
-  margin-top: -360px; /* -height/2 */
-  border: 2px dashed var(--muted); 
-  pointer-events: none; 
-  opacity: 0.8;
-  color: var(--muted);
-  font-size: 12px;
-  text-align: right;
-  padding: 4px;
-  box-sizing: border-box;
-  /* Z-index baixo, deve ficar no fundo */
-  z-index: 1; 
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
-}
+/* REMOVIDO: ESTILO #print-guide REMOVIDO */
 
 .node {
   position: absolute;
@@ -125,8 +105,11 @@ button.secondary {
   border: 2px solid var(--border-color);
   cursor: grab;
   text-align: center;
-  /* Z-index alto para garantir que os nós fiquem visíveis */
-  z-index: 100; 
+  
+  /* Z-index limpo/restaurado, confiando no contexto de empilhamento */
+  z-index: 20; 
+  position: relative; 
+
   touch-action: none;
 }
 .node .title {
@@ -134,24 +117,22 @@ button.secondary {
   font-size: 15px;
   color: var(--box-text);
   margin: 0;
-  /* CORREÇÃO: Força o fundo a ser transparente, mas o nó principal já tem um background */
-  /* Para resolver o vazamento da linha, vamos garantir que o texto não use a cor de fundo do body/stage */
-  /* Removemos o `background-clip: text` ou `color: transparent` que poderia ter sido inserido */
+  
+  position: relative;
+  z-index: 21; 
+  background-color: transparent; 
 }
 
-/* NÓS CENTRAIS E FILHOS */
-.central .title {
-    /* MUDANÇA: Define o fundo do título para a mesma cor do nó central. */
-    /* Isso garante que a área atrás do texto seja sólida e não deixe as linhas passarem. */
-    background-color: var(--central-node-bg);
-    /* Adicionamos box-shadow: none para evitar qualquer artefato de sombreamento */
+/* NÓS CENTRAIS E FILHOS: Limpando estilos do título */
+.central .title,
+.child.box-color-1 .title,
+.child.box-color-2 .title,
+.child.box-color-3 .title,
+.child.box-color-4 .title,
+.child.box-color-5 .title {
+    background-color: transparent;
     box-shadow: none; 
 }
-.child.box-color-1 .title { background-color: var(--box1-bg); }
-.child.box-color-2 .title { background-color: var(--box2-bg); }
-.child.box-color-3 .title { background-color: var(--box3-bg); }
-.child.box-color-4 .title { background-color: var(--box4-bg); }
-.child.box-color-5 .title { background-color: var(--box5-bg); }
 
 
 /* NÍVEL 2: SUBTÓPICO */
@@ -160,7 +141,7 @@ button.secondary {
   font-size: 14px;
   color: var(--subtopic-text);
   cursor: grab;
-  z-index: 90; 
+  z-index: 10; 
   max-width: 200px;
   padding: 2px 0;
   text-align: left;
@@ -173,7 +154,7 @@ button.secondary {
   font-size: 14px;
   color: var(--subtopic-text);
   cursor: grab;
-  z-index: 80; 
+  z-index: 5; 
   max-width: 180px;
   padding: 1px 0;
   text-align: left;
@@ -211,7 +192,8 @@ svg {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  z-index: 50; 
+  /* Z-index abaixo dos nós */
+  z-index: 1; 
 }
 svg path {
   fill: none;
