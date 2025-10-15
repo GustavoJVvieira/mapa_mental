@@ -1,6 +1,57 @@
 // ====================================================================
 // script.js
 // ====================================================================
+import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+// ===============================
+// CONFIGURAÇÃO
+// ===============================
+const GEMINI_API_KEY = AIzaSyBvqBe5dKexHUXJcHdqAHaYimKBuEN1nKc; // ⚠️ Substitua por sua chave Gemini
+const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
+const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+// ===============================
+// LÓGICA DO BOTÃO "GERAR COM GEMINI"
+// ===============================
+document.getElementById("generateBtn").addEventListener("click", async () => {
+  const inputText = document.getElementById("input").value.trim();
+  if (!inputText) {
+    alert("Insira um texto para gerar o mapa mental.");
+    return;
+  }
+
+  const prompt = `
+Você é um gerador de estrutura de mapa mental. Sua tarefa é analisar o texto abaixo e convertê-lo em uma estrutura hierárquica, seguindo estritamente este formato:
+
+[ideia central:] <Tema Principal>
+[box 1.] <Tópico Principal>
+subtópico 1 - <Subtópico>
+subtópico 1.1 - <Sub-Subtópico>
+
+Texto a ser processado:
+---
+${inputText}
+---
+
+Responda SOMENTE no formato de mapa mental.
+`;
+
+  try {
+    const result = await model.generateContent(prompt);
+    const response = await result.response.text();
+
+    if (!response.startsWith("[ideia central:]")) {
+      throw new Error("O formato retornado não parece válido.");
+    }
+
+    document.getElementById("input").value = response;
+    alert("✅ Mapa mental gerado! Agora clique em 'Parser & Desenhar'.");
+  } catch (error) {
+    console.error("Erro com Gemini:", error);
+    alert("Erro ao gerar com Gemini. Veja o console para detalhes.");
+  }
+});
+
 let renderedMapData = { central: null, children: [] };
 const AVAILABLE_COLORS = {
     'verde': '#5cb85c', 'roxo': '#9c58b6', 'azul': '#4c87c6',
