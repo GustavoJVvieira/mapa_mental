@@ -6,7 +6,7 @@ import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 // ===============================
 // CONFIGURAÇÃO
 // ===============================
-const GEMINI_API_KEY =AIzaSyBvqBe5dKexHUXJcHdqAHaYimKBuEN1nKc; // ⚠️ Substitua por sua chave Gemini
+const GEMINI_API_KEY ="AIzaSyBvqBe5dKexHUXJcHdqAHaYimKBuEN1nKc"; // ⚠️ Substitua por sua chave Gemini
 const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -751,4 +751,5 @@ window.addEventListener('load', ()=>{
   document.getElementById('downloadBtn').addEventListener('click', downloadMindMap);
 });
 // Fim do script.js
+
 
