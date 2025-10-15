@@ -90,7 +90,7 @@ button.secondary {
   transform-origin: 0 0;
 }
 
-/* NOVO ESTILO: Guia de Área de Download */
+/* ESTILO: Guia de Área de Download */
 #print-guide {
   position: absolute;
   top: 50%;
@@ -100,22 +100,21 @@ button.secondary {
   height: 720px;
   margin-left: -640px; /* -width/2 */
   margin-top: -360px; /* -height/2 */
-  border: 2px dashed #ff5722; /* Linha tracejada laranja */
-  pointer-events: none; /* Não deve interferir no clique */
-  opacity: 0.5;
-  color: #ff5722;
+  /* MUDANÇA: Cor mais suave e opacidade mantida */
+  border: 2px dashed var(--muted); 
+  pointer-events: none; 
+  opacity: 0.8;
+  color: var(--muted);
   font-size: 12px;
   text-align: right;
   padding: 4px;
   box-sizing: border-box;
-  /* MUDANÇA: Abaixar o z-index para que os nós do mapa apareçam por cima */
+  /* MUDANÇA: Z-index muito baixo para não interferir nos nós (que são 20, 10, 5) */
   z-index: 1; 
-  /* FIM MUDANÇA */
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
 }
-/* FIM NOVO ESTILO */
 
 .node {
   position: absolute;
@@ -127,7 +126,8 @@ button.secondary {
   border: 2px solid var(--border-color);
   cursor: grab;
   text-align: center;
-  z-index: 20; /* Garantir que os nós fiquem por cima */
+  /* MUDANÇA: Z-index mais alto para garantir a sobreposição */
+  z-index: 100; 
   touch-action: none;
 }
 .node .title {
@@ -137,31 +137,31 @@ button.secondary {
   margin: 0;
 }
 /* NÍVEL 2: SUBTÓPICO */
-/* Mantido em negrito (Tópicos em Bold) */
 .sub-node {
   position: absolute;
   font-size: 14px;
   color: var(--subtopic-text);
   cursor: grab;
-  z-index: 10;
+  /* MUDANÇA: Z-index mais alto */
+  z-index: 90; 
   max-width: 200px;
   padding: 2px 0;
   text-align: left;
-  font-weight: bold; /* Tópicos em Bold (Nível 2) */
+  font-weight: bold; 
   touch-action: none;
 }
 /* NÍVEL 3: SUBSUBTÓPICO */
-/* Alterado para font-weight: bold para também ficar em negrito */
 .sub-sub-node {
   position: absolute;
   font-size: 14px;
   color: var(--subtopic-text);
   cursor: grab;
-  z-index: 5;
+  /* MUDANÇA: Z-index mais alto */
+  z-index: 80; 
   max-width: 180px;
   padding: 1px 0;
   text-align: left;
-  font-weight: bold; /* Agora também em negrito, como solicitado */
+  font-weight: bold; 
   touch-action: none;
 }
 .central {
@@ -195,9 +195,10 @@ svg {
   position: absolute;
   inset: 0;
   pointer-events: none;
+  /* Garante que o SVG de linhas fique abaixo dos nós, mas acima do guia (z-index padrão de SVG é mais alto que div, mas é bom garantir) */
+  z-index: 50; 
 }
 svg path {
-  /* A cor agora é definida no JS */
   fill: none;
   stroke-width: 1.5;
   stroke-dasharray: 4 4;
@@ -218,7 +219,8 @@ svg .sub-sub-line {
   display: none;
   justify-content: center;
   align-items: center;
-  z-index: 100;
+  /* Mantido com z-index alto para ficar acima de tudo */
+  z-index: 500;
 }
 .modal-content {
   background: var(--panel);
