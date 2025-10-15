@@ -214,7 +214,35 @@ function createColorPalette() {
         colorPaletteContainer.appendChild(square);
     });
 }
+function downloadMindMap() {
+    const printGuide = document.getElementById('print-guide');
+    // Oculta o guia de impressão temporariamente para não aparecer no PNG
+    if (printGuide) {
+        printGuide.style.display = 'none';
+    }
 
+    html2canvas(stage, {
+        scale: 2, // Increase resolution for better quality
+        useCORS: true,
+        backgroundColor: null // Preserve transparency if needed
+    }).then(canvas => {
+        const link = document.createElement('a');
+        link.download = 'mind_map.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        
+        // Reexibe o guia após a captura
+        if (printGuide) {
+            printGuide.style.display = 'flex'; // ou block, dependendo do display original
+        }
+    }).catch(error => {
+        console.error("Erro ao gerar PNG:", error);
+        // Garante que o guia seja reexibido mesmo em caso de erro
+        if (printGuide) {
+            printGuide.style.display = 'flex';
+        }
+    });
+}
 
 // --- Parser ---
 function parseInput(text){
@@ -765,4 +793,5 @@ window.addEventListener('load', ()=>{
   document.getElementById('downloadBtn').addEventListener('click', downloadMindMap);
 });
 // Fim do script.js
+
 
