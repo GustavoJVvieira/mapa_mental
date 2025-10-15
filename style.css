@@ -100,7 +100,7 @@ button.secondary {
   height: 720px;
   margin-left: -640px; /* -width/2 */
   margin-top: -360px; /* -height/2 */
-  /* MUDANÇA: Cor mais suave e opacidade mantida */
+  /* CORREÇÃO: Cor mais suave e opacidade */
   border: 2px dashed var(--muted); 
   pointer-events: none; 
   opacity: 0.8;
@@ -109,7 +109,7 @@ button.secondary {
   text-align: right;
   padding: 4px;
   box-sizing: border-box;
-  /* MUDANÇA: Z-index muito baixo para não interferir nos nós (que são 20, 10, 5) */
+  /* MANTIDO: Z-index muito baixo */
   z-index: 1; 
   display: flex;
   justify-content: flex-end;
@@ -126,7 +126,7 @@ button.secondary {
   border: 2px solid var(--border-color);
   cursor: grab;
   text-align: center;
-  /* MUDANÇA: Z-index mais alto para garantir a sobreposição */
+  /* AUMENTADO: Z-index máximo para garantir a sobreposição de todos os nós */
   z-index: 100; 
   touch-action: none;
 }
@@ -142,7 +142,6 @@ button.secondary {
   font-size: 14px;
   color: var(--subtopic-text);
   cursor: grab;
-  /* MUDANÇA: Z-index mais alto */
   z-index: 90; 
   max-width: 200px;
   padding: 2px 0;
@@ -156,7 +155,6 @@ button.secondary {
   font-size: 14px;
   color: var(--subtopic-text);
   cursor: grab;
-  /* MUDANÇA: Z-index mais alto */
   z-index: 80; 
   max-width: 180px;
   padding: 1px 0;
@@ -195,7 +193,7 @@ svg {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  /* Garante que o SVG de linhas fique abaixo dos nós, mas acima do guia (z-index padrão de SVG é mais alto que div, mas é bom garantir) */
+  /* MANTIDO: SVG de linhas fica abaixo dos nós (100) mas acima do guia (1) */
   z-index: 50; 
 }
 svg path {
@@ -219,7 +217,6 @@ svg .sub-sub-line {
   display: none;
   justify-content: center;
   align-items: center;
-  /* Mantido com z-index alto para ficar acima de tudo */
   z-index: 500;
 }
 .modal-content {
